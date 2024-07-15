@@ -1,0 +1,44 @@
+### Positive numbers
+POST http://localhost:8080/calculate
+Content-Type: application/json
+
+{
+  "number1": 5,
+  "number2": 3
+}
+
+### Negative numbers
+POST http://localhost:8080/calculate
+Content-Type: application/json
+
+{
+  "number1": -10,
+  "number2": -7
+}
+
+### Zero and positive number
+POST http://localhost:8080/calculate
+Content-Type: application/json
+
+{
+  "number1": 0,
+  "number2": 15
+}
+
+### Large numbers
+POST http://localhost:8080/calculate
+Content-Type: application/json
+
+{
+  "number1": 1000000,
+  "number2": 2000000
+}
+
+### Floating point numbers (note: these will be truncated to integers)
+POST http://localhost:8080/calculate
+Content-Type: application/json
+
+{
+  "number1": 3.14,
+  "number2": 2.86
+}

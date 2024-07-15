@@ -1,0 +1,57 @@
+openapi: 3.0.0
+info:
+  title: Calculate API
+  version: 1.0.0
+  description: API for performing calculations
+
+paths:
+  /calculate:
+    post:
+      summary: Perform a calculation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculateRequest'
+      responses:
+        '200':
+          description: Successful calculation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculateResponse'
+    get:
+      summary: Get summary times 10
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculateRequest'
+      responses:
+        '200':
+          description: Successful calculation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculateResponse'
+
+components:
+  schemas:
+    CalculateRequest:
+      type: object
+      properties:
+        number1:
+          type: integer
+        number2:
+          type: integer
+      required:
+        - number1
+        - number2
+
+    CalculateResponse:
+      type: object
+      properties:
+        result:
+          type: integer
