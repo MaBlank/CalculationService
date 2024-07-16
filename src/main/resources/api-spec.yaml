@@ -5,7 +5,7 @@ info:
   description: API for performing calculations
 
 paths:
-  /calculate:
+  /calculate2:
     post:
       summary: Perform a calculation
       requestBody:
@@ -21,8 +21,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CalculateResponse'
-    get:
-      summary: Get summary times 10
+  /calculate:
+    post:
+      summary: Perform a calculation
       requestBody:
         required: true
         content:
