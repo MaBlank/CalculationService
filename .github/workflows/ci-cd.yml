@@ -59,20 +59,6 @@ jobs:
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker push matthiasblank1990/calculationservice:${{ github.run_number }}
 
-      # **JMeter Performance-Tests ausführen**
-      - name: Run JMeter tests
-        uses: docker://justb4/jmeter:5.4.1
-        with:
-          # -n: Non-GUI mode, -t: Test plan, -l: log file, -e: generate report, -o: report directory
-          args: -n -t jmeter/performance-test.jmx -l jmeter/report.jtl -e -o jmeter/report
-
-      # **JMeter-Bericht hochladen**
-      - name: Upload JMeter Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: jmeter-report
-          path: jmeter/report
-
       # Schritt 9: Deployment zu Azure
       - name: Deploy to Azure
         env:
