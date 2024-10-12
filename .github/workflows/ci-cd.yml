@@ -36,6 +36,16 @@ jobs:
           name: jacoco-report
           path: target/site/jacoco
 
+      - name: SonarCloud Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./mvnw sonar:sonar \
+          -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+          -Dsonar.organization=${{ secrets.SONAR_ORG }} \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+
       # Schritt 6: Docker-Image bauen
       - name: Build Docker image
         run: docker build -t matthiasblank1990/calculationservice:${{ github.run_number }} .
