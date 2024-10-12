@@ -7,6 +7,7 @@ public class CalcService {
         result[1] = (b * 2) + 1; // F
         result[2] = (c * 2) + 1; // G
         result[3] = (d * 2) + 1; // H
+        //
         return result;
     }
 }
