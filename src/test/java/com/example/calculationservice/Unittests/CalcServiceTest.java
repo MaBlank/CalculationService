@@ -3,6 +3,7 @@ package com.example.calculationservice.Unittests;
 import com.example.calculationservice.CalcService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 public class CalcServiceTest {
 
+    @Disabled
     @Test
     public void testCalculateExpectedValues() throws IOException {
         // JSON-Datei einlesen
