@@ -1,6 +1,5 @@
 name: CI/CD Pipeline
 
-# Dieser Workflow wird bei jedem Push auf den master-Branch ausgeführt
 on:
   push:
     branches:
@@ -36,20 +35,22 @@ jobs:
           name: jacoco-report
           path: target/site/jacoco
 
+      # Schritt 6: SonarCloud-Analyse durchführen
       - name: SonarCloud Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          run: ./mvnw sonar:sonar \
+        run: |
+          ./mvnw sonar:sonar \
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
             -Dsonar.organization=${{ secrets.SONAR_ORG }} \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
-      # Schritt 6: Docker-Image bauen
+      # Schritt 7: Docker-Image bauen
       - name: Build Docker image
         run: docker build -t matthiasblank1990/calculationservice:${{ github.run_number }} .
 
-      # Schritt 7: Docker-Image zu Docker Hub pushen
+      # Schritt 8: Docker-Image zu Docker Hub pushen
       - name: Push Docker image to Docker Hub
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -58,7 +59,7 @@ jobs:
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker push matthiasblank1990/calculationservice:${{ github.run_number }}
 
-      # Schritt 8: Deployment zu Azure
+      # Schritt 9: Deployment zu Azure
       - name: Deploy to Azure
         env:
           AZURE_WEBAPP_NAME: myUniqueAppName12345
