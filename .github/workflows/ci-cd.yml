@@ -21,15 +21,19 @@ jobs:
         with:
           java-version: '17'
 
-      # Schritt 3: Baue das Projekt mit Maven
+      # Schritt 3: Setze ausführbare Rechte für mvnw
+      - name: Set executable permissions for Maven wrapper
+        run: chmod +x ./mvnw
+
+      # Schritt 4: Baue das Projekt mit Maven
       - name: Build with Maven
         run: ./mvnw clean package
 
-      # Schritt 4: Docker-Image bauen
+      # Schritt 5: Docker-Image bauen
       - name: Build Docker image
         run: docker build -t matthiasblank1990/calculationservice:${{ github.run_number }} .
 
-      # Schritt 5: Docker-Image zu Docker Hub pushen
+      # Schritt 6: Docker-Image zu Docker Hub pushen
       - name: Push Docker image to Docker Hub
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -38,7 +42,7 @@ jobs:
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker push matthiasblank1990/calculationservice:${{ github.run_number }}
 
-      # Schritt 6: Deployment zu Azure
+      # Schritt 7: Deployment zu Azure
       - name: Deploy to Azure
         env:
           AZURE_WEBAPP_NAME: myUniqueAppName12345
