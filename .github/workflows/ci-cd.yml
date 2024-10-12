@@ -1,6 +1,6 @@
 name: CI/CD Pipeline
 
-# Dieser Workflow wird bei jedem Push auf den main-Branch ausgeführt
+# Dieser Workflow wird bei jedem Push auf den master-Branch ausgeführt
 on:
   push:
     branches:
@@ -25,15 +25,22 @@ jobs:
       - name: Set executable permissions for Maven wrapper
         run: chmod +x ./mvnw
 
-      # Schritt 4: Baue das Projekt mit Maven
-      - name: Build with Maven
-        run: ./mvnw clean package
+      # Schritt 4: Baue das Projekt und führe Tests mit Maven (inkl. JaCoCo)
+      - name: Run tests and collect coverage with JaCoCo
+        run: ./mvnw clean verify
 
-      # Schritt 5: Docker-Image bauen
+      # Schritt 5: Speichere JaCoCo-Bericht als Artefakt
+      - name: Upload JaCoCo report as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: jacoco-report
+          path: target/site/jacoco
+
+      # Schritt 6: Docker-Image bauen
       - name: Build Docker image
         run: docker build -t matthiasblank1990/calculationservice:${{ github.run_number }} .
 
-      # Schritt 6: Docker-Image zu Docker Hub pushen
+      # Schritt 7: Docker-Image zu Docker Hub pushen
       - name: Push Docker image to Docker Hub
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -42,7 +49,7 @@ jobs:
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker push matthiasblank1990/calculationservice:${{ github.run_number }}
 
-      # Schritt 7: Deployment zu Azure
+      # Schritt 8: Deployment zu Azure
       - name: Deploy to Azure
         env:
           AZURE_WEBAPP_NAME: myUniqueAppName12345

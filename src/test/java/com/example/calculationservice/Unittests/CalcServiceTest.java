@@ -13,11 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 public class CalcServiceTest {
 
-    @Disabled
+
     @Test
     public void testCalculateExpectedValues() throws IOException {
         // JSON-Datei einlesen 234
-        File jsonFile = new File("C:\\Users\\Matth\\IdeaProjects\\CalculationService\\src\\main\\resources\\export.json"); // Pfad zur JSON-Datei anpassen
+        // Lade die JSON-Datei aus dem Classpath
+        ClassLoader classLoader = getClass().getClassLoader();
+        File jsonFile = new File(classLoader.getResource("export.json").getFile());
+
         ObjectMapper mapper = new ObjectMapper();
         JsonNode rootNode = mapper.readTree(jsonFile);
 
