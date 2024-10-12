@@ -16,7 +16,7 @@ public class CalcServiceTest {
     @Disabled
     @Test
     public void testCalculateExpectedValues() throws IOException {
-        // JSON-Datei einlesen
+        // JSON-Datei einlesen 234
         File jsonFile = new File("C:\\Users\\Matth\\IdeaProjects\\CalculationService\\src\\main\\resources\\export.json"); // Pfad zur JSON-Datei anpassen
         ObjectMapper mapper = new ObjectMapper();
         JsonNode rootNode = mapper.readTree(jsonFile);
