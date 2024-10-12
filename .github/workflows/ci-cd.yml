@@ -31,7 +31,7 @@ jobs:
 
       # Schritt 5: Speichere JaCoCo-Bericht als Artefakt
       - name: Upload JaCoCo report as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: jacoco-report
           path: target/site/jacoco
