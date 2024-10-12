@@ -12,6 +12,7 @@ public class CalculateApiControllerImpl implements CalculateApi, Calculate2Api {
     @Override
     public ResponseEntity<CalculateResponse> calculatePost(CalculateRequest calculateRequest) {
         int result = calculateRequest.getNumber1() + calculateRequest.getNumber2();
+        System.out.println(result);
         CalculateResponse response = new CalculateResponse();
         response.setResult(result);
         return ResponseEntity.ok(response);
