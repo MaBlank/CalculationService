@@ -1,20 +1,30 @@
 package com.example.calculationservice.Cucumbertests;
-
+import com.example.calculationservice.CalculationServiceApplication;
 import com.example.model.CalculateRequest;
 import com.example.model.CalculateResponse;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.test.context.ContextConfiguration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SpringBootTest(classes = CalculationServiceApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration
 public class CalculationStepDefinitions {
 
-    private final TestRestTemplate restTemplate = new TestRestTemplate();
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @LocalServerPort
+    private int port;
+
     private ResponseEntity<CalculateResponse> response;
     private ResponseEntity<String> errorResponse;
 
@@ -28,7 +38,7 @@ public class CalculationStepDefinitions {
         CalculateRequest request = new CalculateRequest();
         request.setNumber1(number1);
         request.setNumber2(number2);
-        String url = "http://localhost:8080/calculate";
+        String url = "http://localhost:" + port + "/calculate";
         response = restTemplate.postForEntity(url, request, CalculateResponse.class);
     }
 
@@ -41,7 +51,7 @@ public class CalculationStepDefinitions {
     @When("I send a request with non-numeric values")
     public void iSendARequestWithNonNumericValues() {
         String invalidRequest = "{\"number1\":\"abc\",\"number2\":\"def\"}";
-        String url = "http://localhost:8080/calculate";
+        String url = "http://localhost:" + port + "/calculate";
         errorResponse = restTemplate.postForEntity(url, invalidRequest, String.class);
     }
 
