@@ -1,18 +1,16 @@
 package com.example.calculationservice.Unittests;
 
 import com.example.calculationservice.CalcService;
+import com.example.calculationservice.JsonSchemaValidator;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
+import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
-
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 public class CalcServiceTest {
-
 
     @Test
     public void testCalculateExpectedValues() throws IOException {
@@ -49,4 +47,19 @@ public class CalcServiceTest {
             assertArrayEquals(expectedValues, calculatedValues, "Die berechneten Werte stimmen nicht mit den erwarteten Werten überein.");
         }
     }
+
+    @Test
+    public void testValidJson() {
+        try {
+            String schemaFilePath = "person_schema.json";
+            String jsonFilePath = "person.json";
+
+            JsonSchemaValidator.validateJson(schemaFilePath, jsonFilePath);
+
+        } catch (Exception e) {
+            fail("Das JSON-Dokument entspricht nicht dem Schema: " + e.getMessage());
+        }
+    }
 }
+
+

@@ -1,0 +1,15 @@
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "age": 30,
+  "email": "john.doe@example.com",
+  "address": {
+    "street": "Main Street 123",
+    "city": "Springfield",
+    "postalCode": "12345"
+  },
+  "phoneNumbers": [
+    "+123456789",
+    "+987654321"
+  ]
+}
