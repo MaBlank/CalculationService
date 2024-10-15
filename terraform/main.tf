@@ -31,7 +31,3 @@ resource "azurerm_app_service" "app_service" {
     linux_fx_version = "DOCKER|matthiasblank1990/calculationservice:latest"
   }
 }
-
-output "app_service_default_hostname" {
-  value = azurerm_app_service.app_service.default_site_hostname
-}
