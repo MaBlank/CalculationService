@@ -61,13 +61,12 @@ jobs:
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1
 
-      # Wechsle in das Verzeichnis, in dem sich die Terraform-Dateien befinden
       - name: Initialize Terraform
-        working-directory: ./terraform  # Hier muss der relative Pfad zu deinem Terraform-Verzeichnis stehen
+        working-directory: ./terraform  # Setze den korrekten Pfad zu deinem Terraform-Verzeichnis
         run: terraform init
 
       - name: Apply Terraform
-        working-directory: ./terraform  # Hier muss der relative Pfad zu deinem Terraform-Verzeichnis stehen
+        working-directory: ./terraform  # Setze den korrekten Pfad zu deinem Terraform-Verzeichnis
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -82,8 +81,5 @@ jobs:
 
       - name: Output App Service URL
         id: app_service_output
-        working-directory: ./terraform  # Hier muss der relative Pfad zu deinem Terraform-Verzeichnis stehen
+        working-directory: ./terraform  # Setze den korrekten Pfad zu deinem Terraform-Verzeichnis
         run: echo $(terraform output -raw app_service_default_hostname)
-
-      - name: Store App Service URL for later steps
-        run: echo "APP_SERVICE_URL=$(terraform output -raw app_service_default_hostname)" >> $GITHUB_ENV
