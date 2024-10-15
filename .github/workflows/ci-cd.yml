@@ -61,10 +61,13 @@ jobs:
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v1
 
+      # Wechsle in das Verzeichnis, in dem sich die Terraform-Dateien befinden
       - name: Initialize Terraform
+        working-directory: ./terraform  # Hier muss der relative Pfad zu deinem Terraform-Verzeichnis stehen
         run: terraform init
 
       - name: Apply Terraform
+        working-directory: ./terraform  # Hier muss der relative Pfad zu deinem Terraform-Verzeichnis stehen
         env:
           ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -77,36 +80,10 @@ jobs:
             -var "client_secret=${{ secrets.AZURE_CLIENT_SECRET }}" \
             -var "tenant_id=${{ secrets.AZURE_TENANT_ID }}"
 
-      # Holen des Terraform Outputs
       - name: Output App Service URL
-        id: app_service_output  # Wir geben diesem Schritt eine ID, um den Output später verwenden zu können
+        id: app_service_output
+        working-directory: ./terraform  # Hier muss der relative Pfad zu deinem Terraform-Verzeichnis stehen
         run: echo $(terraform output -raw app_service_default_hostname)
 
-      # Optional: Ausgabe des Outputs zur weiteren Verwendung in anderen Schritten
       - name: Store App Service URL for later steps
         run: echo "APP_SERVICE_URL=$(terraform output -raw app_service_default_hostname)" >> $GITHUB_ENV
-
-  deploy_to_azure:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Deploy to Azure
-        env:
-          AZURE_WEBAPP_NAME: myUniqueAppName12345
-          AZURE_RESOURCE_GROUP: myResourceGroup
-          AZURE_PLAN: myAppServicePlan
-          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-        run: |
-          az login --service-principal --username $AZURE_CLIENT_ID --password $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
-          az webapp config container set --name $AZURE_WEBAPP_NAME --resource-group $AZURE_RESOURCE_GROUP --docker-custom-image-name matthiasblank1990/calculationservice:${{ github.run_number }}
-
-      # Optionale Ausgabe der URL für spätere Schritte oder Logs
-      - name: Echo App Service URL
-        run: echo "The application is available at ${{ steps.app_service_output.outputs.APP_SERVICE_URL }}"
