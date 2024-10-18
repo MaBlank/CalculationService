@@ -38,6 +38,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/CalculateResponse'
 
+  /calculateTax:
+    post:
+      summary: Perform a Tax-calculation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalculateTaxRequest'
+      responses:
+        '200':
+          description: Successful tax calculation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalculateTaxResponse'
+
 components:
   schemas:
     CalculateRequest:
@@ -50,9 +67,20 @@ components:
       required:
         - number1
         - number2
-
+    CalculateTaxRequest:
+      type: object
+      properties:
+        Steuerbilanzgewinn:
+          type: number
+      required:
+        - Steuerbilanzgewinn
     CalculateResponse:
       type: object
       properties:
         result:
           type: integer
+    CalculateTaxResponse:
+      type: object
+      properties:
+        result:
+          type: number
