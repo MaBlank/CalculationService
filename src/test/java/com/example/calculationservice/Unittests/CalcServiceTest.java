@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.File;
 import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -59,6 +60,15 @@ public class CalcServiceTest {
         } catch (Exception e) {
             fail("Das JSON-Dokument entspricht nicht dem Schema: " + e.getMessage());
         }
+    }
+
+    @Test
+    public void testInvalidJsonThrowsException() {
+        String schemaFilePath = "person_schema.json";
+        String jsonFilePath = "invalid_person.json";
+
+        assertThrows(Exception.class,
+                () -> JsonSchemaValidator.validateJson(schemaFilePath, jsonFilePath));
     }
 }
 
